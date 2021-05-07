@@ -1,0 +1,21 @@
+version: "3.7"
+
+services: 
+  db:
+    image: mysql
+    container_name: my-db
+    restart: always
+    ports: ['4306:3306']
+    environment: 
+      MYSQL_DATABASE: dbSem4
+      MYSQL_USER: ngocdinh
+      MYSQL_PASSWORD: sa1234
+      MYSQL_ROOT_PASSWORD: sa1234
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    depends_on: ['db']
+    ports: ['8081:80']
+    links: ['db:db']
+
