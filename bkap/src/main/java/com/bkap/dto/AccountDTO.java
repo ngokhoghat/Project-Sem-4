@@ -1,41 +1,30 @@
-package com.bkap.entity;
+package com.bkap.dto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import com.bkap.entity.Image;
+import com.bkap.entity.Post;
 
-@Entity
-@Table(name = "account")
-public class Account extends BaseEntity {
-	@Column(name = "displayName")
+public class AccountDTO {
 	private String displayName;
 
-	@Column(name = "email")
 	private String email;
 
-	@Column(name = "password")
 	private String password;
 
-	@Column(name = "roles")
 	private String roles;
 
-	@OneToOne(mappedBy = "account")
 	private Image image;
 
-	@OneToMany(mappedBy = "account")
 	private List<Post> posts = new ArrayList<>();
 
-	public Account() {
+	public AccountDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Account(String displayName, String email, String password, String roles, Image image, List<Post> posts) {
+	public AccountDTO(String displayName, String email, String password, String roles, Image image, List<Post> posts) {
 		super();
 		this.displayName = displayName;
 		this.email = email;
