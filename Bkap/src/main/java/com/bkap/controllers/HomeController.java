@@ -9,6 +9,6 @@ public class HomeController {
 
 	@RequestMapping()
 	public String viewHomePage() {
-		return "homepage";
+		return "admin/dashboard";
 	}
 }
