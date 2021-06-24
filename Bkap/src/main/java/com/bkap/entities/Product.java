@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product extends BaseEntity {
 	@Column(name = "displayName")
 	private String displayName;

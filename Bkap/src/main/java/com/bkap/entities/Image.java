@@ -8,7 +8,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "image")
+@Table(name = "images")
 public class Image extends BaseEntity {
 	@Column(name = "displayName")
 	private String displayName;

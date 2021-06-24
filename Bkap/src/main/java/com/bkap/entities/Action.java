@@ -1,95 +1,45 @@
 package com.bkap.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "action")
+@Table(name = "actions")
 public class Action extends BaseEntity {
-	@Column(name = "displayName")
-	private String displayName;
+	@Column(name = "type")
+	private String type;
 
-	@Column(name = "email")
-	private String email;
-
-	@Column(name = "password")
-	private String password;
-
-	@Column(name = "roles")
-	private String roles;
-
-	@OneToOne(mappedBy = "account")
-	private Image image;
-
-	@OneToMany(mappedBy = "account")
-	private List<Post> posts = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "account_Id")
+	private Account account;
 
 	public Action() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Action(String displayName, String email, String password, String roles, Image image, List<Post> posts) {
+	public Action(String type, Account account) {
 		super();
-		this.displayName = displayName;
-		this.email = email;
-		this.password = password;
-		this.roles = roles;
-		this.image = image;
-		this.posts = posts;
+		this.type = type;
+		this.account = account;
 	}
 
-	public String getDisplayName() {
-		return displayName;
+	public String getType() {
+		return type;
 	}
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getEmail() {
-		return email;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRoles() {
-		return roles;
-	}
-
-	public void setRoles(String roles) {
-		this.roles = roles;
-	}
-
-	public Image getImage() {
-		return image;
-	}
-
-	public void setImage(Image image) {
-		this.image = image;
-	}
-
-	public List<Post> getPosts() {
-		return posts;
-	}
-
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 }

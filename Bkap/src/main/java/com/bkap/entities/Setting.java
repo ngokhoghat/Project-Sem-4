@@ -1,43 +1,31 @@
 package com.bkap.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "advertisements")
-public class Advertisement extends BaseEntity {
+@Table(name = "settings")
+public class Setting extends BaseEntity {
 	@Column(name = "displayName")
 	private String displayName;
-	
+
 	@Column(name = "content")
 	private String content;
-	
-	@Column(name = "type")
-	private String type;
-	
+
 	@Column(name = "status")
 	private String status;
-	
-	@OneToMany(mappedBy = "advertisement")
-	private List<Image> images = new ArrayList<>();
 
-	public Advertisement() {
+	public Setting() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Advertisement(String displayName, String content, String type, String status, List<Image> images) {
+	public Setting(String displayName, String content, String status) {
 		super();
 		this.displayName = displayName;
 		this.content = content;
-		this.type = type;
 		this.status = status;
-		this.images = images;
 	}
 
 	public String getDisplayName() {
@@ -56,14 +44,6 @@ public class Advertisement extends BaseEntity {
 		this.content = content;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -71,13 +51,4 @@ public class Advertisement extends BaseEntity {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	public List<Image> getImages() {
-		return images;
-	}
-
-	public void setImages(List<Image> images) {
-		this.images = images;
-	}
-	
 }

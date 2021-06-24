@@ -6,7 +6,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "payment")
+@Table(name = "payments")
 public class Payment extends BaseEntity {
 	@Column(name = "paymentType")
 	private String paymentType;
