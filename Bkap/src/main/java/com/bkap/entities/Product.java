@@ -38,13 +38,17 @@ public class Product extends BaseEntity {
 	@OneToMany(mappedBy = "product")
 	private List<OrderDetail> orderDetails = new ArrayList<>();
 
+	@OneToMany(mappedBy = "product")
+	private List<AttributeValue> attributeValues = new ArrayList<>();
+
 	public Product() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public Product(String displayName, String quantity, String description, String status, String currency,
-			Category category, List<Image> images, List<OrderDetail> orderDetails) {
+			Category category, List<Image> images, List<OrderDetail> orderDetails,
+			List<AttributeValue> attributeValues) {
 		super();
 		this.displayName = displayName;
 		this.quantity = quantity;
@@ -54,6 +58,7 @@ public class Product extends BaseEntity {
 		this.category = category;
 		this.images = images;
 		this.orderDetails = orderDetails;
+		this.attributeValues = attributeValues;
 	}
 
 	public String getDisplayName() {
@@ -120,4 +125,11 @@ public class Product extends BaseEntity {
 		this.orderDetails = orderDetails;
 	}
 
+	public List<AttributeValue> getAttributeValues() {
+		return attributeValues;
+	}
+
+	public void setAttributeValues(List<AttributeValue> attributeValues) {
+		this.attributeValues = attributeValues;
+	}
 }
