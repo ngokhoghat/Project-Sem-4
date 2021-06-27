@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "categorys")
+@Table(name = "categories")
 public class Category extends BaseEntity {
 	@Column(name = "displayName")
 	private String displayName;

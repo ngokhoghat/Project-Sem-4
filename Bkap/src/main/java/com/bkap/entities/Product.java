@@ -17,13 +17,16 @@ public class Product extends BaseEntity {
 	private String displayName;
 
 	@Column(name = "quantity")
-	private String quantity;
+	private Integer quantity;
 
 	@Column(name = "description")
 	private String description;
 
 	@Column(name = "status")
 	private String status;
+	
+	@Column(name = "price")
+	private Integer price;
 
 	@Column(name = "currency")
 	private String currency;
@@ -46,14 +49,15 @@ public class Product extends BaseEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Product(String displayName, String quantity, String description, String status, String currency,
-			Category category, List<Image> images, List<OrderDetail> orderDetails,
+	public Product(String displayName, Integer quantity, String description, String status, Integer price,
+			String currency, Category category, List<Image> images, List<OrderDetail> orderDetails,
 			List<AttributeValue> attributeValues) {
 		super();
 		this.displayName = displayName;
 		this.quantity = quantity;
 		this.description = description;
 		this.status = status;
+		this.price = price;
 		this.currency = currency;
 		this.category = category;
 		this.images = images;
@@ -69,11 +73,11 @@ public class Product extends BaseEntity {
 		this.displayName = displayName;
 	}
 
-	public String getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(String quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
@@ -91,6 +95,14 @@ public class Product extends BaseEntity {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
 	}
 
 	public String getCurrency() {
