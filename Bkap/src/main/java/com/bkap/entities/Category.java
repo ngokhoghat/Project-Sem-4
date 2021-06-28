@@ -14,6 +14,9 @@ public class Category extends BaseEntity {
 	@Column(name = "displayName")
 	private String displayName;
 
+	@Column(name = "status")
+	private Boolean status;
+
 	@OneToMany(mappedBy = "category")
 	private List<Product> products = new ArrayList<>();
 
@@ -22,9 +25,10 @@ public class Category extends BaseEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Category(String displayName, List<Product> products) {
+	public Category(String displayName, Boolean status, List<Product> products) {
 		super();
 		this.displayName = displayName;
+		this.status = status;
 		this.products = products;
 	}
 
@@ -36,6 +40,14 @@ public class Category extends BaseEntity {
 		this.displayName = displayName;
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 	public List<Product> getProducts() {
 		return products;
 	}
@@ -43,4 +55,5 @@ public class Category extends BaseEntity {
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
+
 }

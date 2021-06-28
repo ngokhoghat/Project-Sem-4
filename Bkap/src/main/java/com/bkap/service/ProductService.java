@@ -9,7 +9,7 @@ import com.bkap.dto.AccountDTO;
 import com.bkap.entities.Account;
 import com.bkap.entities.Product;
 import com.bkap.model.IAccountService;
-import com.bkap.repository.AccountReposiroty;
+import com.bkap.repository.AccountRepository;
 import com.bkap.repository.ProductRepository;
 import com.bkap.utils.Converter;
 
@@ -29,6 +29,10 @@ public class ProductService implements IAccountService {
 
 	public List<Product> findAll() {
 		return productRepository.findAll();
+	}
+
+	public Product createProduct(Product product) {
+		return productRepository.save(product);
 	}
 //	@Override
 //	public AccountDTO save(AccountDTO accountDTO) {

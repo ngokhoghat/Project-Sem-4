@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 import com.bkap.dto.AccountDTO;
 import com.bkap.entities.Account;
 import com.bkap.model.IAccountService;
-import com.bkap.repository.AccountReposiroty;
+import com.bkap.repository.AccountRepository;
 import com.bkap.utils.Converter;
 
 @Service
 public class AccountService implements IAccountService {
 	@Autowired
-	private AccountReposiroty accountReposiroty;
+	private AccountRepository accountReposiroty;
 
 	@Autowired
 	private Converter converter;
