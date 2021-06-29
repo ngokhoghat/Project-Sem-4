@@ -44,6 +44,8 @@
 <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css"
 	th:href="@{/plugins/summernote/summernote-bs4.min.css}">
 
+<link rel="stylesheet" href="/plugins/toastr/toastr.min.css"
+	th:href="@{/plugins/toastr/toastr.min.css}">
 </head>
 <body>
 	<div th:replace="fragments/admin-header :: header"></div>
@@ -51,6 +53,8 @@
 	<main layout:fragment="main-content"></main>
 	<div th:replace="~{fragments/admin-footer :: footer}"></div>
 
+	<button type="button" class="btn btn-success toastrDefaultSuccess">
+		Launch Success Toast</button>
 
 	<script src="/plugins/jquery/jquery.min.js"
 		th:href="@{/plugins/jquery/jquery.min.js}"></script>
@@ -103,5 +107,63 @@
 
 	<script src="/plugins/dropzone/min/dropzone.min.js"
 		th:href="@{/plugins/dropzone/min/dropzone.min.js}"></script>
+
+	<script src="/plugins/toastr/toastr.min.js"
+		th:href="@{/plugins/toastr/toastr.min.js}"></script>
+
+	<script>
+		$(function() {
+			$("#customSwitch").change(function() {
+				const value = $(this).is(":checked");
+				$("#customSwitchLabel").text(value ? 'Hiện' : 'Ẩn');
+			})
+
+			$("#add-caregory-btn").click(function() {
+				const data = {
+					displayName : $("#add-caregory #displayName").val(),
+					status : $("#add-caregory #customSwitch").is(":checked")
+				}
+
+				$.ajax({
+					url : "/api/category/add-category",
+					type : "POST",
+					data : JSON.stringify(data),
+					contentType : "application/json",
+					success : function(response) {
+						
+						$("categoryContainer").append(`
+							<tr>
+								<td><p></p></td>
+								<td><p></p></td>
+								<td><p></p></td>
+
+								<td><span class="badge bg-success">active</span></td>
+								<td><span class="badge badge-secondary">inactive</span></td>
+
+								<td class="project-actions text-right"><a
+									class="btn btn-primary btn-sm"
+									href="/admin/category/view-category/${product.id}"> <i
+										class="fas fa-folder"> </i> View
+								</a> <a class="btn btn-info btn-sm"
+									th:href="@{'/admin/category/edit-category/' + ${category.id}}">
+										<i class="fas fa-pencil-alt"> </i> Edit
+								</a> <a th:if="${category.status == true}"
+									th:href="@{'/admin/category/toggle-status/' + ${category.id}}"
+									class="btn btn-success btn-sm"><i class="fas fa-eye"></i>
+										Ẩn </a> <a th:if="${category.status != true}"
+									th:href="@{'/admin/category/toggle-status/' + ${category.id}}"
+									class="btn btn-danger btn-sm"><i class="far fa-eye-slash"></i>
+										Hiện </a></td>
+							</tr>
+						`)
+						toastr.success('Thêm danh mục thành công.')
+					},
+					error : function(e) {
+						toastr.error('Thêm danh mục thất bại.')
+					}
+				});
+			})
+		})
+	</script>
 </body>
 </html>

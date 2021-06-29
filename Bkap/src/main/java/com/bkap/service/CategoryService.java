@@ -23,4 +23,10 @@ public class CategoryService implements IAccountService {
 	public List<Category> findAll() {
 		return categoryRepository.findAll();
 	}
+
+	public Category toggleStatusCategory(Long id) {
+		Category category = categoryRepository.getById(id);
+		category.setStatus(category.getStatus() != null ? !category.getStatus() : true);
+		return categoryRepository.save(category);
+	}
 }

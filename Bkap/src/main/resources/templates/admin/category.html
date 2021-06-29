@@ -7,6 +7,12 @@
 <head>
 <meta charset="utf-8">
 <title>Danh mục</title>
+
+<style type="text/css">
+.project-actions .btn {
+	min-width: 65px;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="main-content">
@@ -32,10 +38,8 @@
 					<div class="card-header">
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool"></button>
-							<a href="/admin/category/add-category">
-								<button type="button" class="btn btn-primary">Thêm danh
-									mục</button>
-							</a>
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								data-target="#add-caregory">Thêm danh mục</button>
 						</div>
 					</div>
 					<div class="card-body p-0">
@@ -49,25 +53,32 @@
 									<th></th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="categoryContainer">
 								<th:block th:each="category : ${listCategory}">
 									<tr>
 										<td><p th:text="${category.id}"></p></td>
 										<td><p th:text="${category.displayName}"></p></td>
 										<td><p th:text="${#lists.size(category.products)}"></p></td>
-										<td><p th:text="${category.status}"></p></td>
+
+										<td th:if="${category.status == true}"><span
+											class="badge bg-success">active</span></td>
+										<td th:if="${category.status != true}"><span
+											class="badge badge-secondary">inactive</span></td>
 
 										<td class="project-actions text-right"><a
 											class="btn btn-primary btn-sm"
-											href="/admin/category/view-product/${product.id}"> <i
+											href="/admin/category/view-category/${product.id}"> <i
 												class="fas fa-folder"> </i> View
 										</a> <a class="btn btn-info btn-sm"
-											href="/admin/category/edit-product/${product.id}"> <i
-												class="fas fa-pencil-alt"> </i> Edit
-										</a> <a class="btn btn-danger btn-sm"
-											href="/admin/category/delete-product/${product.id}"> <i
-												class="fas fa-trash"> </i> Ẩn / Hiện
-										</a></td>
+											th:href="@{'/admin/category/edit-category/' + ${category.id}}">
+												<i class="fas fa-pencil-alt"> </i> Edit
+										</a> <a th:if="${category.status == true}"
+											th:href="@{'/admin/category/toggle-status/' + ${category.id}}"
+											class="btn btn-success btn-sm"><i class="fas fa-eye"></i>
+												Ẩn </a> <a th:if="${category.status != true}"
+											th:href="@{'/admin/category/toggle-status/' + ${category.id}}"
+											class="btn btn-danger btn-sm"><i class="far fa-eye-slash"></i>
+												Hiện </a></td>
 									</tr>
 								</th:block>
 							</tbody>
@@ -75,6 +86,39 @@
 					</div>
 				</div>
 			</section>
+		</div>
+		<div class="modal fade" id="add-caregory">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title text-md">Thêm danh mục</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Tên danh mục</label> <input class="form-control"
+								name="displayName" id="displayName"
+								placeholder="Nhập tên danh mục">
+						</div>
+						<div class="form-group">
+							<label>Trạng thái</label>
+							<div class="custom-control custom-switch">
+								<input type="checkbox" class="custom-control-input"
+									id="customSwitch"> <label id="customSwitchLabel"
+									class="custom-control-label" for="customSwitch">Ẩn</label>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer justify-content-between">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary"
+							id="add-caregory-btn">Save</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
