@@ -9,6 +9,6 @@ public class ProductController {
 
 	@RequestMapping("")
 	public String viewHomePage() {
-		return "/admin/dashboard";
+		return "/product";
 	}
 }

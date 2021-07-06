@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin-layout}">
+
+<head>
+<meta charset="utf-8">
+<title>Tạo đơn hàng</title>
+</head>
+<body>
+	<div layout:fragment="main-content">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h2>Tạo đơn hàng</h2>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Add Order</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</section>
+			<form th:action="@{/admin/order/add-order}" th:object="${order}"
+				method="post">
+				<section class="content">
+					<div class="container-fluid">
+						<div class="card card-default">
+							<div class="card-header">
+								<div class="card-tools">
+									<div class="input-group input-group-lg">
+										<input type="search" class="form-control form-control-lg"
+											id="searchProductInput" placeholder="Search product">
+										<div class="input-group-append">
+											<button type="button" class="btn btn-lg btn-default"
+												id="searchProduct">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<table class="table table-striped projects">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Tên sản phẩm</th>
+											<th>Hình ảnh</th>
+											<th>Số lượng</th>
+											<th>Giá</th>
+											<th>Danh mục</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="productContainer">
+										<tr>
+											<td>Tìm kiếm sản phẩm ngay.</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<hr />
+								<h3 class="mt-5">Giỏ hàng</h3>
+								<table class="table table-striped projects">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Tên sản phẩm</th>
+											<th>Hình ảnh</th>
+											<th>Số lượng</th>
+											<th>Giá</th>
+											<th>Danh mục</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="cardContainer">
+										<tr id="cardContainerText">
+											<td>Chưa có sản phẩm.</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="row mt-5">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Phương thức thanh toán</label> <select
+												class="form-control select2" name="currency">
+												<option value="VNĐ">Chuyển khoản</option>
+												<option value="$">Thanh toán tiền mặt</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Ghi chú</label>
+											<textarea class="form-control" rows="3" name="note" id="note"
+												placeholder="Tạo ghi chú"></textarea>
+										</div>
+
+									</div>
+									<div class="col-md-6 p-4">
+										<div class="table-responsive">
+											<table class="table">
+												<tr>
+													<th style="width: 50%; border-top: none;">Subtotal:</th>
+													<td style="border-top: none;">0 VND</td>
+												</tr>
+												<tr>
+													<th>Tax (9.3%)</th>
+													<td>0 VND</td>
+												</tr>
+												<tr>
+													<th>Shipping:</th>
+													<td>0 VND</td>
+												</tr>
+												<tr>
+													<th>Total:</th>
+													<td id="totalPrice">0 VND</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="card-tools" style="text-align: right;">
+									<button type="button" class="btn btn-tool"></button>
+									<button type="button" class="btn btn-primary" id="addOrderBtn">Thêm
+										tài khoản</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</form>
+		</div>
+	</div>
+
+	<script layout:fragment="script">
+	$(function () {
+		const { from, fromEvent, of } = rxjs;
+		const { ajax } = rxjs.ajax;
+		const { map, switchMap, debounceTime } = rxjs.operators;
+		
+		const calcPrice = (currency) => {
+			let totalPrice = 0;
+			
+			$("#cardContainer tr").each(function (){
+				totalPrice += $(this).data("price")
+			})
+			
+			$("#totalPrice").text(new Intl.NumberFormat().format(totalPrice ) + " " + currency)
+		}
+		
+		const handleRemoveProduct = () => {
+			$("#cardContainer tr button").click(function name(params) {
+				$(this).parents("tr").remove();
+				calcPrice("VND");
+			})
+		}
+		
+		const handleAddProduct = (data) => {
+			$("#productContainer tr button").click(function name(params) {
+				const id = $(this).parents("tr").data("id");
+				const product = data.filter(item=> item.id == id)[0];
+				
+				const { images, currency, description, displayName, price, quantity, status, category } = product;
+				const newPrice = new Intl.NumberFormat().format(price)
+				
+				if($("#cardContainerText").length)	$("#cardContainer").empty();
+				
+				$("#cardContainer").append(`
+					<tr data-id="${id}" data-price="${price}">
+						<td><p>${id}</p></td>
+						<td><p>${displayName}</p></td>
+						<td><p>${images ? "" : ""}</p></td>
+						<td><p>${quantity}</p></td>
+						<td><p>${newPrice} ${currency}</p></td>
+						<td><p>${category.displayName}</p></td>
+						
+						<td class="project-actions text-right">
+						<button type="button" class="btn btn-danger btn-sm">
+							<i class="fas fa-minus-square"></i>
+							<span>Xóa</span>
+						</button>
+					</tr>
+				`)
+				
+				handleRemoveProduct();
+				calcPrice(currency);
+			})
+		}
+		
+		const showProduct = (data) => {
+			const productContainer = $("#productContainer");
+			productContainer.empty();
+			
+			const newData = data.splice(0, 5);
+			const productList = newData.map((item => {
+				const { id, images, currency, description, displayName, price, quantity, status, category } = item;
+				const newPrice = new Intl.NumberFormat().format(price)
+				return `
+				<tr data-id="${id}">
+					<td><p>${id}</p></td>
+					<td><p>${displayName}</p></td>
+					<td><p>${images ? "" : ""}</p></td>
+					<td><p>${quantity}</p></td>
+					<td><p>${newPrice} ${currency}</p></td>
+					<td><p>${category.displayName}</p></td>
+					
+					<td class="project-actions text-right">
+					<button type="button" class="btn btn-primary btn-sm">
+						<i class="fas fa-cart-plus"></i>
+						<span>Thêm</span>
+					</button>
+				</tr>
+				`
+			}))
+			
+			productContainer.append(productList);
+			handleAddProduct(newData);
+		}
+
+		const input = document.querySelector("#searchProductInput");
+		
+		const getProduct = (keyword) => {
+			  return ajax({
+			    url: "/api/product?productName=" + keyword
+			  });
+			};
+
+		fromEvent(input, "input")
+		  .pipe(
+		    map((event) => event.target.value),
+		    debounceTime(500),
+		    switchMap((val) => {
+		    	return from(getProduct(val)).pipe(
+		    		map((res) => showProduct(res.response))
+		    	);
+		    })
+		  )
+		  .subscribe();
+		
+		$("#addOrderBtn").click(function (){
+			
+		})
+	})
+	</script>
+</body>
+</html>

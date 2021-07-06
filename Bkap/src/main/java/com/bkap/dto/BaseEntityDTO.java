@@ -13,6 +13,10 @@ public abstract class BaseEntityDTO {
 		return id;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getCreateBy() {
 		return createBy;
 	}
@@ -44,5 +48,4 @@ public abstract class BaseEntityDTO {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-
 }

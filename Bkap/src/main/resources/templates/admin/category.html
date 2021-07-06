@@ -55,7 +55,7 @@
 							</thead>
 							<tbody id="categoryContainer">
 								<th:block th:each="category : ${listCategory}">
-									<tr>
+									<tr th:attr="data-id=${category.id}">
 										<td><p th:text="${category.id}"></p></td>
 										<td><p th:text="${category.displayName}"></p></td>
 										<td><p th:text="${#lists.size(category.products)}"></p></td>
@@ -67,12 +67,13 @@
 
 										<td class="project-actions text-right"><a
 											class="btn btn-primary btn-sm"
-											href="/admin/category/view-category/${product.id}"> <i
-												class="fas fa-folder"> </i> View
-										</a> <a class="btn btn-info btn-sm"
-											th:href="@{'/admin/category/edit-category/' + ${category.id}}">
-												<i class="fas fa-pencil-alt"> </i> Edit
-										</a> <a th:if="${category.status == true}"
+											th:href="@{'/admin/category/view-category/' + ${category.id}}">
+												<i class="fas fa-folder"> </i> View
+										</a>
+											<button class="btn btn-info btn-sm edit-category"
+												th:attr="data-id=${category.id}">
+												<i class="fas fa-pencil-alt"></i> Edit
+											</button> <a th:if="${category.status == true}"
 											th:href="@{'/admin/category/toggle-status/' + ${category.id}}"
 											class="btn btn-success btn-sm"><i class="fas fa-eye"></i>
 												Ẩn </a> <a th:if="${category.status != true}"
@@ -116,6 +117,41 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						<button type="button" class="btn btn-primary"
 							id="add-caregory-btn">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="edit-caregory">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title text-md">Sửa danh mục</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Tên danh mục</label> <input class="form-control"
+								name="displayName" id="displayNameEdit"
+								placeholder="Nhập tên danh mục">
+						</div>
+						<div class="form-group">
+							<label>Trạng thái</label>
+							<div class="custom-control custom-switch">
+								<input type="checkbox" class="custom-control-input"
+									id="customSwitchEdit"> <label
+									id="customSwitchEditLabel" class="custom-control-label"
+									for="customSwitchEdit">Ẩn</label>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer justify-content-between">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary"
+							id="edit-caregory-btn">Save</button>
 					</div>
 				</div>
 			</div>

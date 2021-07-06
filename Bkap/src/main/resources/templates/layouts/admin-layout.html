@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,14 +48,13 @@
 <link rel="stylesheet" href="/plugins/toastr/toastr.min.css"
 	th:href="@{/plugins/toastr/toastr.min.css}">
 </head>
+
 <body>
 	<div th:replace="fragments/admin-header :: header"></div>
 	<div th:replace="fragments/admin-sidebar"></div>
 	<main layout:fragment="main-content"></main>
-	<div th:replace="~{fragments/admin-footer :: footer}"></div>
 
-	<button type="button" class="btn btn-success toastrDefaultSuccess">
-		Launch Success Toast</button>
+	<div th:replace="~{fragments/admin-footer :: footer}"></div>
 
 	<script src="/plugins/jquery/jquery.min.js"
 		th:href="@{/plugins/jquery/jquery.min.js}"></script>
@@ -63,8 +63,9 @@
 		th:href="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
 
 	<script>
-		$.widget.bridge('uibutton', $.ui.button)
-	</script>
+    $.widget.bridge('uibutton', $.ui.button)
+
+  </script>
 
 	<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"
 		th:href="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -88,14 +89,16 @@
 		th:href="@{/plugins/moment/moment.min.js}"></script>
 
 	<script src="/plugins/daterangepicker/daterangepicker.js"
-		th:href="@{/plugins/daterangepicker/daterangepicker.js}"></script>
+		th:href="@{/plugins/daterangepicker/daterangepicker.js}">
+  </script>
 
 	<script
 		src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"
 		th:href="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
 
 	<script src="/plugins/summernote/summernote-bs4.min.js"
-		th:href="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+		th:href="@{/plugins/summernote/summernote-bs4.min.js}">
+  </script>
 
 	<script
 		src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"
@@ -111,59 +114,210 @@
 	<script src="/plugins/toastr/toastr.min.js"
 		th:href="@{/plugins/toastr/toastr.min.js}"></script>
 
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.3.3/rxjs.umd.js"></script>
+
+	<script src="/plugins/jsgrid/demos/db.js"
+		th:href="@{/plugins/jsgrid/demos/db.js}"></script>
+
+	<script src="/plugins/jsgrid/jsgrid.min.js"
+		th:href="@{/plugins/jsgrid/jsgrid.min.js}"></script>
+
+	<script layout:fragment="script"></script>
+
 	<script>
-		$(function() {
-			$("#customSwitch").change(function() {
-				const value = $(this).is(":checked");
-				$("#customSwitchLabel").text(value ? 'Hiện' : 'Ẩn');
-			})
+    $(function () {
+      let editId = null;
 
-			$("#add-caregory-btn").click(function() {
-				const data = {
-					displayName : $("#add-caregory #displayName").val(),
-					status : $("#add-caregory #customSwitch").is(":checked")
-				}
+      $("#customSwitch").change(function () {
+        const value = $(this).is(":checked");
+        $("#customSwitchLabel").text(value ? 'Hiện' : 'Ẩn');
+      })
 
-				$.ajax({
-					url : "/api/category/add-category",
-					type : "POST",
-					data : JSON.stringify(data),
-					contentType : "application/json",
-					success : function(response) {
-						
-						$("categoryContainer").append(`
-							<tr>
-								<td><p></p></td>
-								<td><p></p></td>
-								<td><p></p></td>
+      $("#customSwitchEdit").change(function () {
+        const value = $(this).is(":checked");
+        $("#customSwitchEditLabel").text(value ? 'Hiện' : 'Ẩn');
+      })
 
-								<td><span class="badge bg-success">active</span></td>
-								<td><span class="badge badge-secondary">inactive</span></td>
+      $("#add-caregory-btn").click(function () {
+        const data = {
+          displayName: $("#add-caregory #displayName").val(),
+          status: $("#add-caregory #customSwitch").is(":checked")
+        }
+
+        $.ajax({
+          url: "/api/category/add-category",
+          type: "POST",
+          data: JSON.stringify(data),
+          contentType: "application/json",
+          success: function (response) {
+            const {
+              displayName,
+              id,
+              products,
+              status
+            } = response;
+            $("#categoryContainer").append(`
+							<tr data-id="${id}">
+								<td><p>${id}</p></td>
+								<td><p>${displayName}</p></td>
+								<td><p>${products.length}</p></td>
+								<td><span class=${status ? `"badge bg-success"` : `"badge badge-secondary"`}>${status ? "active" : "inactive"}</span></td>
 
 								<td class="project-actions text-right"><a
 									class="btn btn-primary btn-sm"
-									href="/admin/category/view-category/${product.id}"> <i
+									href="/admin/category/view-category/${id}"> <i
 										class="fas fa-folder"> </i> View
-								</a> <a class="btn btn-info btn-sm"
-									th:href="@{'/admin/category/edit-category/' + ${category.id}}">
+								</a> <button class="btn btn-info btn-sm"
+									data-id="${id}">
 										<i class="fas fa-pencil-alt"> </i> Edit
-								</a> <a th:if="${category.status == true}"
-									th:href="@{'/admin/category/toggle-status/' + ${category.id}}"
-									class="btn btn-success btn-sm"><i class="fas fa-eye"></i>
-										Ẩn </a> <a th:if="${category.status != true}"
-									th:href="@{'/admin/category/toggle-status/' + ${category.id}}"
-									class="btn btn-danger btn-sm"><i class="far fa-eye-slash"></i>
-										Hiện </a></td>
+								</button> <a href="/admin/category/toggle-status/${id}"
+									class=${status ? `"btn btn-success btn-sm"` : `"btn btn-danger btn-sm"`}><i class=${status ? `"fas fa-eye"` : `"far fa-eye-slash"`}></i>
+									${status === true ? "Ẩn" : "Hiện"}</a> </td>
 							</tr>
 						`)
-						toastr.success('Thêm danh mục thành công.')
-					},
-					error : function(e) {
-						toastr.error('Thêm danh mục thất bại.')
-					}
-				});
-			})
-		})
-	</script>
+
+            $("#add-caregory").modal("hide");
+            toastr.success('Thêm danh mục thành công.')
+          },
+          error: function (e) {
+            toastr.error('Thêm danh mục thất bại.')
+          }
+        });
+
+        $(".edit-category").click(function () {
+          const id = $(this).data("id");
+          editId = id;
+
+          $.ajax({
+            url: `/api/category/get-category?id=${id}`,
+            type: "GET",
+            contentType: "application/json",
+            success: function (response) {
+              const {
+                displayName,
+                status
+              } = response;
+              $("#displayNameEdit").val(displayName);
+              $("#customSwitchEdit").prop('checked', status);
+              $("#customSwitchEditLabel").text(!status ? 'Ẩn' : 'Hiện')
+            },
+            error: function (e) {
+              console.log("Lỗi")
+            }
+          });
+
+          $("#edit-caregory").modal("show");
+        })
+      })
+
+      $(".edit-category").click(function () {
+        const id = $(this).data("id");
+        editId = id;
+
+        $.ajax({
+          url: `/api/category/get-category?id=${id}`,
+          type: "GET",
+          contentType: "application/json",
+          success: function (response) {
+            const {
+              displayName,
+              status
+            } = response;
+            $("#displayNameEdit").val(displayName);
+            $("#customSwitchEdit").prop('checked', status);
+            $("#customSwitchEditLabel").text(!status ? 'Ẩn' : 'Hiện')
+          },
+          error: function (e) {
+            console.log("Lỗi")
+          }
+        });
+
+        $("#edit-caregory").modal("show");
+      })
+
+      $("#edit-caregory-btn").click(function () {
+        if (editId) {
+          const data = {
+            id: editId,
+            displayName: $("#edit-caregory #displayNameEdit").val(),
+            status: $("#edit-caregory #customSwitchEdit").is(":checked")
+          }
+
+          $.ajax({
+            url: "/api/category/edit-category",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (response) {
+              const {
+                id,
+                status,
+                products,
+                displayName,
+              } = response;
+
+              $(`#categoryContainer tr[data-id='${id}']`).empty()
+
+              $(`#categoryContainer tr[data-id='${id}']`).append(`
+                <td><p>${id}</p></td>
+                  <td><p>${displayName}</p></td>
+                  <td><p>${products.length}</p></td>
+                  <td><span class=${status ? `"badge bg-success"` : `"badge badge-secondary"`}>${status ? "active" : "inactive"}</span></td>
+
+                  <td class="project-actions text-right"><a
+                    class="btn btn-primary btn-sm"
+                    href="/admin/category/view-category/${id}"> <i
+                      class="fas fa-folder"> </i> View
+                  </a> <button class="btn btn-info btn-sm edit-category"
+                    data-id="${id}">
+                      <i class="fas fa-pencil-alt"> </i> Edit
+                  </button> <a href="/admin/category/toggle-status/${id}"
+                    class=${status ? `"btn btn-success btn-sm"` : `"btn btn-danger btn-sm"`}><i class=${status ? `"fas fa-eye"` : `"far fa-eye-slash"`}></i>
+                    ${status === true ? "Ẩn" : "Hiện"}</a> </td>
+              `)
+
+              toastr.success('Sửa danh mục thành công.')
+              $("#edit-caregory").modal("hide");
+
+              $(".edit-category").click(function () {
+                const id = $(this).data("id");
+                editId = id;
+
+                $.ajax({
+                  url: `/api/category/get-category?id=${id}`,
+                  type: "GET",
+                  contentType: "application/json",
+                  success: function (response) {
+                    const {
+                      displayName,
+                      status
+                    } = response;
+                    $("#displayNameEdit").val(displayName);
+                    $("#customSwitchEdit").prop('checked', status);
+                    $("#customSwitchEditLabel").text(!status ? 'Ẩn' : 'Hiện')
+                  },
+                  error: function (e) {
+                    console.log("Lỗi")
+                  }
+                });
+
+                $("#edit-caregory").modal("show");
+              })
+            },
+            error: function (e) {
+              console.log("Lỗi")
+            }
+          });
+
+        } else {
+          toastr.error('Không tìm thấy danh mục')
+        }
+      })
+
+    })
+
+  </script>
 </body>
+
 </html>

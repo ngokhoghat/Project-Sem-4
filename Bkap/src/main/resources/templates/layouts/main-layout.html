@@ -5,10 +5,67 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="/client/css/bootstrap.min.css"
+	th:href="@{/client/css/bootstrap.min.css}" rel="stylesheet">
+
+<link href="/client/css/font-awesome.min.css"
+	th:href="@{/client/css/font-awesome.min.css}" rel="stylesheet">
+
+<link href="/client/css/prettyPhoto.css"
+	th:href="@{/client/css/prettyPhoto.css}" rel="stylesheet">
+
+<link href="/client/css/price-range.css"
+	th:href="@{/client/css/price-range.css}" rel="stylesheet">
+
+<link href="/client/css/animate.css"
+	th:href="@{/client/css/animate.css}" rel="stylesheet">
+
+<link href="/client/css/main.css" th:href="@{/client/css/main.css}"
+	rel="stylesheet">
+
+<link href="/client/css/responsive.css"
+	th:href="@{/client/css/responsive.css}" rel="stylesheet">
+
+<link rel="shortcut icon" href="/client/images/ico/favicon.ico"
+	th:href="@{/client/images/ico/favicon.ico}">
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+	href="/client/images/ico/apple-touch-icon-144-precomposed.png"
+	th:href="@{/client/images/ico/apple-touch-icon-144-precomposed.png}">
+
+<link rel="apple-touch-icon-precomposed" sizes="114x114"
+	href="/client/images/ico/apple-touch-icon-114-precomposed.png"
+	th:href="@{/client/images/ico/apple-touch-icon-114-precomposed.png}">
+
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+	href="/client/images/ico/apple-touch-icon-72-precomposed.png"
+	th:href="@{/client/images/ico/apple-touch-icon-72-precomposed.png}">
+
+<link rel="apple-touch-icon-precomposed"
+	href="/client/images/ico/apple-touch-icon-57-precomposed.png"
+	th:href="@{/client/images/ico/apple-touch-icon-57-precomposed.png}">
+
 </head>
 <body>
 	<div th:replace="fragments/header :: header"></div>
 	<main layout:fragment="main-content"></main>
 	<div th:insert="~{fragments/footer :: footer}">...</div>
+
+	<script src="/client/js/jquery.js" th:href="@{/client/js/jquery.js}"></script>
+
+	<script src="/client/js/bootstrap.min.js"
+		th:href="@{/client/js/bootstrap.min.js}"></script>
+
+	<script src="/client/js/jquery.scrollUp.min.js"
+		th:href="@{/client/js/jquery.scrollUp.min.js}"></script>
+
+	<script src="/client/js/price-range.js"
+		th:href="@{/client/js/price-range.js}"></script>
+
+	<script src="/client/js/jquery.prettyPhoto.js"
+		th:href="@{/client/js/jquery.prettyPhoto.js}"></script>
+
+	<script src="/client/js/main.js" th:href="@{/client/js/main.js}"></script>
 </body>
 </html>

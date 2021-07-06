@@ -24,6 +24,9 @@ public class Account extends BaseEntity {
 	@Column(name = "roles")
 	private String roles;
 
+	@Column(name = "status")
+	private Boolean status;
+
 	@OneToOne(mappedBy = "account")
 	private Image image;
 
@@ -35,12 +38,14 @@ public class Account extends BaseEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Account(String displayName, String email, String password, String roles, Image image, List<Post> posts) {
+	public Account(String displayName, String email, String password, String roles, Boolean status, Image image,
+			List<Post> posts) {
 		super();
 		this.displayName = displayName;
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
+		this.status = status;
 		this.image = image;
 		this.posts = posts;
 	}
@@ -77,6 +82,14 @@ public class Account extends BaseEntity {
 		this.roles = roles;
 	}
 
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 	public Image getImage() {
 		return image;
 	}
@@ -92,4 +105,5 @@ public class Account extends BaseEntity {
 	public void setPosts(List<Post> posts) {
 		this.posts = posts;
 	}
+
 }

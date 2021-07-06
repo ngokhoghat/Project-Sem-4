@@ -14,8 +14,12 @@ INSERT INTO products (display_name, quantity, status, description, currency, pri
 INSERT INTO products (display_name, quantity, status, description, currency, price, category_id) VALUES ('Áo thun in logo', 20, 'instock', 'description', 'VND', 250000, 1);
 
 
-INSERT INTO accounts (display_name, email, password, roles) VALUES ('NgocDinh', 'ngokhoghat@gmail.com', '8832310', 'admin');
-INSERT INTO accounts (display_name, email, password, roles) VALUES ('NgocDinh1', 'ngokhoghat1@gmail.com', '8832310', 'employee');
-INSERT INTO accounts (display_name, email, password, roles) VALUES ('NgocDinh2', 'ngokhoghat2@gmail.com', '8832310', 'customer');
-INSERT INTO accounts (display_name, email, password, roles) VALUES ('NgocDinh3', 'ngokhoghat3@gmail.com', '8832310', 'customer');
-INSERT INTO accounts (display_name, email, password, roles) VALUES ('NgocDinh4', 'ngokhoghat4@gmail.com', '8832310', 'customer');
+INSERT INTO accounts (display_name, email, password, roles, status) VALUES ('NgocDinh', 'ngokhoghat@gmail.com', '$2y$12$dYzMqs8k7dpqmFyNfK3vP.QNv3xON9rfke3cxPowuy52e6BqVr9rK', 'ADMIN', 1);
+INSERT INTO accounts (display_name, email, password, roles, status) VALUES ('NgocDinh1', 'ngokhoghat1@gmail.com', '8832310', 'employee', 1);
+INSERT INTO accounts (display_name, email, password, roles, status) VALUES ('NgocDinh2', 'ngokhoghat2@gmail.com', '8832310', 'customer', 1);
+INSERT INTO accounts (display_name, email, password, roles, status) VALUES ('NgocDinh3', 'ngokhoghat3@gmail.com', '8832310', 'customer', 0);
+INSERT INTO accounts (display_name, email, password, roles, status) VALUES ('NgocDinh4', 'ngokhoghat4@gmail.com', '8832310', 'customer', 1);
+
+INSERT INTO payments (payment_type, allowed) VALUES ('Thanh toán khi giao hàng', 1);
+INSERT INTO payments (payment_type, allowed) VALUES ('Chuyển khoản', 0);
+

@@ -33,6 +33,7 @@ public class Converter {
 		product.setId(productDTO.getId());
 		product.setPrice(productDTO.getPrice());
 		product.setImages(productDTO.getImages());
+		product.setCurrency(productDTO.getCurrency());
 		product.setCategory(productDTO.getCategory());
 		product.setQuantity(productDTO.getQuantity());
 		product.setDisplayName(productDTO.getDisplayName());
@@ -42,10 +43,18 @@ public class Converter {
 		return product;
 	}
 
-	public AccountDTO toProductDto(Account account) {
-		AccountDTO accountDTO = new AccountDTO();
-		accountDTO.setEmail(account.getEmail());
-		return accountDTO;
+	public ProductDTO toProductDto(Product product) {
+		ProductDTO productDTO = new ProductDTO();
+		
+		productDTO.setId(product.getId());
+		productDTO.setPrice(product.getPrice());
+		productDTO.setCurrency(product.getCurrency());
+		productDTO.setQuantity(product.getQuantity());
+		productDTO.setDisplayName(product.getDisplayName());
+		productDTO.setDescription(product.getDescription());
+		
+		productDTO.setCategory(product.getCategory());
+		return productDTO;
 	}
 
 	public Account toProduct(AccountDTO accountDTO, Account account) {

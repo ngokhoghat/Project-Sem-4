@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin-layout}">
+
+<head>
+<meta charset="utf-8">
+<title>Tài khoản</title>
+<style type="text/css">
+.project-actions .btn {
+	min-width: 65px;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="main-content">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h2>Danh sách tài khoản</h2>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Accounts</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="content">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool"></button>
+							<a href="/admin/account/add-account">
+								<button type="button" class="btn btn-primary">Thêm tài
+									khoản</button>
+							</a>
+						</div>
+					</div>
+					<div class="card-body p-0">
+						<table class="table table-striped projects">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Tên hiển thị</th>
+									<th>Hình ảnh</th>
+									<th>Chức vụ</th>
+									<th>Email</th>
+									<th>Số bài đăng</th>
+									<th>Trạng thái</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:each="account : ${listAccounts}">
+									<tr>
+										<td><p th:text="${account.id}"></p></td>
+										<td><p th:text="${account.displayName}"></p></td>
+										<td><p th:text="${account.image}"></p></td>
+										<td><p th:text="${account.roles}"></p></td>
+										<td><p th:text="${account.email}"></p></td>
+										<td><p th:text="${#lists.size(account.posts)}"></p></td>
+										<td th:if="${account.status == true}"><span
+											class="badge bg-success">active</span></td>
+										<td th:if="${account.status != true}"><span
+											class="badge badge-secondary">inactive</span></td>
+
+										<td class="project-actions text-right"><a
+											class="btn btn-primary btn-sm"
+											href="/admin/account/view-account/${account.id}"> <i
+												class="fas fa-folder"> </i> View
+										</a> <a th:if="${account.status == true}"
+											th:href="@{'/admin/account/toggle-status/' + ${account.id}}"
+											class="btn btn-success btn-sm"><i class="fas fa-eye"></i>
+												Ẩn </a> <a th:if="${account.status != true}"
+											th:href="@{'/admin/account/toggle-status/' + ${account.id}}"
+											class="btn btn-danger btn-sm"><i class="far fa-eye-slash"></i>
+												Hiện </a></td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+</html>

@@ -34,6 +34,10 @@ public class ProductService implements IAccountService {
 	public Product createProduct(Product product) {
 		return productRepository.save(product);
 	}
+
+	public List<Product> findProductByProductName(String productName) {
+		return productRepository.findByDisplayNameContains(productName);
+	}
 //	@Override
 //	public AccountDTO save(AccountDTO accountDTO) {
 //		Account account = converter.toAccount(accountDTO);

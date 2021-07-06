@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan({ "com.bkap.service", "com.bkap.utils", "com.bkap.api", "com.bkap.controllers",
-		"com.bkap.controllers.admin" })
+@ComponentScan({ "com.bkap.api", "com.bkap.config", "com.bkap.controllers", "com.bkap.controllers.admin",
+		"com.bkap.service", "com.bkap.utils", })
 @EnableJpaRepositories("com.bkap.repository")
 @EntityScan(basePackages = { "com.bkap.entities" })
 public class BkapApplication {

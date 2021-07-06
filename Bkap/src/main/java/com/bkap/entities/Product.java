@@ -10,6 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
@@ -33,6 +36,7 @@ public class Product extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "category_Id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Category category;
 
 	@OneToMany(mappedBy = "product")
