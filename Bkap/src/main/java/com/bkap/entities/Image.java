@@ -7,26 +7,30 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 @Entity
 @Table(name = "images")
 public class Image extends BaseEntity {
 	@Column(name = "displayName")
 	private String displayName;
-	
+
 	@Column(name = "linkImage")
 	private String linkImage;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "product_Id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Product product;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "advertisement_Id")
 	private Advertisement advertisement;
-	
+
 	@OneToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+	@JoinColumn(name = "account_id")
+	private Account account;
 
 	public Image() {
 		super();

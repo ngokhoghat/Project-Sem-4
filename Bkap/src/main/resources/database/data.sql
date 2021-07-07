@@ -13,6 +13,10 @@ INSERT INTO products (display_name, quantity, status, description, currency, pri
 INSERT INTO products (display_name, quantity, status, description, currency, price, category_id) VALUES ('Áo thun in logo', 20, 'instock', 'description', 'VND', 350000, 1);
 INSERT INTO products (display_name, quantity, status, description, currency, price, category_id) VALUES ('Áo thun in logo', 20, 'instock', 'description', 'VND', 250000, 1);
 
+INSERT INTO images (display_name, link_image, product_id) VALUES ('Áo thun in logo', 'http://localhost:8888/files/1.png', 1);
+INSERT INTO images (display_name, link_image, product_id) VALUES ('Áo thun in logo', 'http://localhost:8888/files/1.png', 1);
+INSERT INTO images (display_name, link_image, product_id) VALUES ('Áo thun in logo', 'http://localhost:8888/files/1.png', 1);
+INSERT INTO images (display_name, link_image, product_id) VALUES ('Áo thun in logo', 'http://localhost:8888/files/1.png', 1);
 
 INSERT INTO accounts (display_name, email, password, roles, status) VALUES ('NgocDinh', 'ngokhoghat@gmail.com', '$2y$12$dYzMqs8k7dpqmFyNfK3vP.QNv3xON9rfke3cxPowuy52e6BqVr9rK', 'ADMIN', 1);
 INSERT INTO accounts (display_name, email, password, roles, status) VALUES ('NgocDinh1', 'ngokhoghat1@gmail.com', '8832310', 'employee', 1);

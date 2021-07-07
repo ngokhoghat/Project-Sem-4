@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bkap.dto.AccountDTO;
-import com.bkap.entities.Account;
 import com.bkap.entities.Product;
 import com.bkap.model.IAccountService;
-import com.bkap.repository.AccountRepository;
 import com.bkap.repository.ProductRepository;
 import com.bkap.utils.Converter;
 

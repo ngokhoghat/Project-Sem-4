@@ -1,14 +1,19 @@
 package com.bkap.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bkap.dto.AccountDTO;
 import com.bkap.dto.ProductDTO;
 import com.bkap.entities.Account;
 import com.bkap.entities.Product;
+import com.bkap.model.FilesStorageService;
 
 @Component
 public class Converter {
+	@Autowired
+	FilesStorageService storageService;
+
 	// Account converter
 	public Account toAccount(AccountDTO accountDTO) {
 		Account account = new Account();
@@ -45,14 +50,15 @@ public class Converter {
 
 	public ProductDTO toProductDto(Product product) {
 		ProductDTO productDTO = new ProductDTO();
-		
+
 		productDTO.setId(product.getId());
 		productDTO.setPrice(product.getPrice());
+		productDTO.setImages(product.getImages());
 		productDTO.setCurrency(product.getCurrency());
 		productDTO.setQuantity(product.getQuantity());
 		productDTO.setDisplayName(product.getDisplayName());
 		productDTO.setDescription(product.getDescription());
-		
+
 		productDTO.setCategory(product.getCategory());
 		return productDTO;
 	}

@@ -23,8 +23,8 @@ public abstract class BaseEntity {
 	@Column
 	private String createBy;
 
-	@Column
 	@CreatedDate
+	@Column(name = "created_date")
 	private Date createDate;
 
 	@Column

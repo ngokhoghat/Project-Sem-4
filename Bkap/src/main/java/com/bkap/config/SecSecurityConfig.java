@@ -21,7 +21,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 		.csrf().disable()
 		.authorizeRequests()
-		.antMatchers("/dist/**", "/plugins/**", "/client/**").permitAll()
+		.antMatchers("/dist/**", "/plugins/**", "/client/**", "/upload", "/files").permitAll()
 		.antMatchers("/", "/home/**", "/product/**", "/api/**", "/blog", "/blog-detail").permitAll()
 		.antMatchers("/cart", "/checkout", "/contact", "/product-detail").permitAll()
 		.antMatchers("/admin/**").permitAll()
