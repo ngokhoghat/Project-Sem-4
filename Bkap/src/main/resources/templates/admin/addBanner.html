@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin-layout}">
+
+<head>
+<meta charset="utf-8">
+<title>Trang trí shop</title>
+
+<style type="text/css">
+.file-border {
+	border-radius: 3px;
+	border: 1px solid #ccc;
+}
+
+.product-image {
+	height: 100%;
+	padding: 10px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-origin: content-box;
+}
+
+#imagesContainer {
+	height: 321px;
+	background-color: #ccc;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="main-content">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h2>Thêm Banner</h2>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="/admin">Home</a></li>
+								<li class="breadcrumb-item active">Add Banner</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</section>
+			<form>
+				<section class="content">
+					<div class="container-fluid">
+						<div class="card card-default">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<div id="imagesContainer"></div>
+										</div>
+										<div class="form-group">
+											<label for="exampleInputFile">File input</label>
+											<div class="input-group">
+												<div class="custom-file">
+													<input type="file" class="custom-file-input"
+														id="exampleInputFile"> <label
+														class="custom-file-label" for="exampleInputFile">Choose
+														file</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Tiêu đề</label> <input class="form-control" id="title"
+												placeholder="Nhập tiêu đề">
+										</div>
+
+										<div class="form-group">
+											<label>Nội dung</label> <input class="form-control"
+												id="content" placeholder="Nhập nội dung">
+										</div>
+
+										<div class="form-group">
+											<label>Button</label> <input class="form-control" id="button"
+												placeholder="Nhập nội dung">
+										</div>
+
+										<div class="form-group">
+											<label>Button Link</label> <input class="form-control"
+												id="buttonLink" placeholder="Nhập link">
+										</div>
+
+										<div class="form-group">
+											<label>Button is use</label>
+											<div class="custom-control custom-switch">
+												<input type="checkbox" checked="checked"
+													class="custom-control-input" id="customSwitchBanner">
+												<label id="customSwitchBannerLabel"
+													class="custom-control-label" for="customSwitchBanner">unused</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="card-tools" style="text-align: right;">
+									<button type="button" class="btn btn-tool"></button>
+									<button type="button" class="btn btn-primary" id="saveProduct">Save</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</form>
+		</div>
+	</div>
+	<script layout:fragment="script">
+		$(function() {
+			$("#customSwitchBanner").change(function () {
+		        const value = $(this).is(":checked");
+		        $("#customSwitchBannerLabel").text(value ? 'use' : 'unused');
+		    })
+		      
+			$("#exampleInputFile").change(function(event) {
+				const { files } = event.target;
+				
+				if(files && files.length > 0){
+					const reader = new FileReader();
+		
+					reader.onloadstart = function(event) {
+					};
+		
+					reader.onprogress = function(event) {
+					};
+		
+					reader.onloadend = function(event) {
+						const listImage = $("#imagesContainer");
+						listImage.empty();
+						
+						$("#imagesContainer").append(`
+							<div class="custom-file file-border" style="height: 100%;">
+								<div class="product-image"
+									style="background-image: url(${event.target.result});"></div>
+							</div>
+						`)
+					};
+		
+					reader.readAsDataURL(files[0]);
+				}
+			})
+			
+			$("#saveProduct").click(function(){
+				const image = $("#exampleInputFile")[0].files[0];
+				let newFile;
+				
+				if(image){
+					const fileType = image.type.split("/")[1];
+					
+					newFile = new File([image], `${new Date().getTime()}.${fileType}`, {type:image.type})
+					
+					const formData = new FormData();
+					formData.append("files", newFile);
+					
+					$.ajax({
+						url: '/uploads',
+						type: "POST",
+						data: formData,
+			            contentType: false,
+			            processData: false
+					})
+				}
+				
+				
+				const body = {
+					displayName: $("#title").val(),
+					content: $("#content").val(),
+					btnName: $("#button").val(),
+					btnLink: $("#buttonLink").val(),
+					btnIsUse: $("#customSwitchBanner").is(":checked"),
+					image: newFile.name
+				}
+				
+				$.ajax({
+					type: "POST",
+					data: JSON.stringify(body),
+					contentType: "application/json",
+					url: '/api/advertisement/create-advertisement',
+					success: () => {
+						toastr.success('Thêm thành công.')
+					},
+					error: () => {
+						toastr.error('Thêm thất bại, đã có lỗi xảy ra.')
+					}
+				})
+			})
+		})
+	</script>
+</body>
+</html>

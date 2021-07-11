@@ -17,7 +17,15 @@ public class OrderService {
 		return orderRepository.findAll();
 	}
 
+	public Order findById(Long id) {
+		return orderRepository.findById(id).get();
+	}
+
 	public Order createOrder(Order order) {
+		return orderRepository.save(order);
+	}
+	
+	public Order updateOrder(Order order) {
 		return orderRepository.save(order);
 	}
 }

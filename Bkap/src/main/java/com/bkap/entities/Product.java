@@ -27,7 +27,7 @@ public class Product extends BaseEntity {
 
 	@Column(name = "status")
 	private String status;
-	
+
 	@Column(name = "price")
 	private Integer price;
 
@@ -35,7 +35,7 @@ public class Product extends BaseEntity {
 	private String currency;
 
 	@ManyToOne
-	@JoinColumn(name = "category_Id")
+	@JoinColumn(name = "category_id")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Category category;
 
@@ -43,9 +43,11 @@ public class Product extends BaseEntity {
 	private List<Image> images = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private List<AttributeValue> attributeValues = new ArrayList<>();
 
 	public Product() {

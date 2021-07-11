@@ -5,14 +5,16 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.bkap.model.Helper;
 import com.bkap.model.Helper.OrderStatus;
 import com.bkap.model.Helper.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "orders")
@@ -21,19 +23,23 @@ public class Order extends BaseEntity {
 	private String note;
 
 	@Column(name = "orderStatus")
-	private Helper.OrderStatus orderStatus;
+	private OrderStatus orderStatus;
 
 	@Column(name = "paymentStatus")
-	private Helper.PaymentStatus paymentStatus;
+	private PaymentStatus paymentStatus;
 
 	@Column(name = "totalPrice")
-	private String totalPrice;
+	private Integer totalPrice;
 
-	@OneToMany(mappedBy = "order")
+	@Column(name = "currency")
+	private String currency;
+
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
 	private List<OrderDetail> orderDetails = new ArrayList<>();
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "payment_id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Payment payment;
 
 	public Order() {
@@ -41,13 +47,14 @@ public class Order extends BaseEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(String note, OrderStatus orderStatus, PaymentStatus paymentStatus, String totalPrice,
+	public Order(String note, OrderStatus orderStatus, PaymentStatus paymentStatus, Integer totalPrice, String currency,
 			List<OrderDetail> orderDetails, Payment payment) {
 		super();
 		this.note = note;
 		this.orderStatus = orderStatus;
 		this.paymentStatus = paymentStatus;
 		this.totalPrice = totalPrice;
+		this.currency = currency;
 		this.orderDetails = orderDetails;
 		this.payment = payment;
 	}
@@ -60,20 +67,36 @@ public class Order extends BaseEntity {
 		this.note = note;
 	}
 
-	public Helper.OrderStatus getOrderStatus() {
+	public OrderStatus getOrderStatus() {
 		return orderStatus;
 	}
 
-	public void setOrderStatus(Helper.OrderStatus orderStatus) {
+	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 
-	public Helper.PaymentStatus getPaymentStatus() {
+	public PaymentStatus getPaymentStatus() {
 		return paymentStatus;
 	}
 
-	public void setPaymentStatus(Helper.PaymentStatus paymentStatus) {
+	public void setPaymentStatus(PaymentStatus paymentStatus) {
 		this.paymentStatus = paymentStatus;
+	}
+
+	public Integer getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Integer totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public List<OrderDetail> getOrderDetails() {
@@ -90,14 +113,6 @@ public class Order extends BaseEntity {
 
 	public void setPayment(Payment payment) {
 		this.payment = payment;
-	}
-
-	public String getTotalPrice() {
-		return totalPrice;
-	}
-
-	public void setTotalPrice(String totalPrice) {
-		this.totalPrice = totalPrice;
 	}
 
 }

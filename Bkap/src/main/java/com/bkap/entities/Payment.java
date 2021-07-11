@@ -1,9 +1,12 @@
 package com.bkap.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 
 @Entity
 @Table(name = "payments")
@@ -14,15 +17,15 @@ public class Payment extends BaseEntity {
 	@Column(name = "allowed")
 	private Boolean allowed;
 
-	@OneToOne(mappedBy = "payment")
-	private Order order;
+	@OneToMany(mappedBy = "payment")
+	private List<Order> order = new ArrayList<>();;
 
 	public Payment() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Payment(String paymentType, Boolean allowed, Order order) {
+	public Payment(String paymentType, Boolean allowed, List<Order> order) {
 		super();
 		this.paymentType = paymentType;
 		this.allowed = allowed;
@@ -45,11 +48,11 @@ public class Payment extends BaseEntity {
 		this.allowed = allowed;
 	}
 
-	public Order getOrder() {
+	public List<Order> getOrder() {
 		return order;
 	}
 
-	public void setOrder(Order order) {
+	public void setOrder(List<Order> order) {
 		this.order = order;
 	}
 

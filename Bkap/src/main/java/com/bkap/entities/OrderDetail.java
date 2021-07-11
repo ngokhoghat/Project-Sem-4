@@ -2,15 +2,19 @@ package com.bkap.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "orderDetail")
 public class OrderDetail extends BaseEntity {
 	@Column(name = "quantity")
-	private String quantity;
+	private Integer quantity;
 
 	@Column(name = "price")
 	private String price;
@@ -21,12 +25,14 @@ public class OrderDetail extends BaseEntity {
 	@Column(name = "grandPrice")
 	private String grandPrice;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Product product;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_Id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private Order order;
 
 	public OrderDetail() {
@@ -34,22 +40,11 @@ public class OrderDetail extends BaseEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public OrderDetail(String quantity, String price, String discount, String grandPrice, Product product,
-			Order order) {
-		super();
-		this.quantity = quantity;
-		this.price = price;
-		this.discount = discount;
-		this.grandPrice = grandPrice;
-		this.product = product;
-		this.order = order;
-	}
-
-	public String getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(String quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
@@ -92,5 +87,4 @@ public class OrderDetail extends BaseEntity {
 	public void setOrder(Order order) {
 		this.order = order;
 	}
-
 }

@@ -47,11 +47,11 @@
 							<thead>
 								<tr>
 									<th>ID</th>
-									<th>Số lượng sản phẩm</th>
-									<th>Tổng giá trị đơn hàng</th>
-									<th>Ghi chú</th>
-									<th>Phương thức thanh toán</th>
-									<th>Trạng thái giao hàng</th>
+									<th style="text-align: center;">Số lượng sản phẩm</th>
+									<th style="text-align: center;">Tổng giá trị đơn hàng</th>
+									<th style="text-align: center;">Phương thức thanh toán</th>
+									<th style="text-align: center;">Trạng thái thanh toán</th>
+									<th style="text-align: center;">Trạng thái đơn hàng</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -65,28 +65,71 @@
 								<th:block th:each="order : ${listOrder}">
 									<tr>
 										<td><p th:text="${order.id}"></p></td>
-										<td><p th:text="${#lists.size(order.orderDetails)}"></p></td>
-										<td><p th:text="${order.totalPrice}"></p></td>
-										<td><p th:text="${order.note}"></p></td>
-										<td><p th:text="${order.payment.paymentType}"></p></td>
-										<td><p th:text="${order.status}"></p></td>
+										<td style="text-align: center;"><p
+												th:text="${#lists.size(order.orderDetails)}"></p></td>
+										<td style="text-align: center;"><p
+												th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'COMMA')} + ' ' + ${order.currency}"></p></td>
+										<td style="text-align: center;"><p
+												th:text="${order.payment.paymentType}"></p></td>
 
-										<td th:if="${order.status == true}"><span
-											class="badge bg-success">active</span></td>
-										<td th:if="${order.status != true}"><span
-											class="badge badge-secondary">inactive</span></td>
+										<td
+											th:if="${#strings.toString(order.paymentStatus) == 'PAID'}"
+											style="text-align: center;"><span
+											class="badge badge-success">PAID</span></td>
+										<td
+											th:if="${#strings.toString(order.paymentStatus) == 'UN_PAID'}"
+											style="text-align: center;"><span
+											class="badge badge-warning">UN PAID</span></td>
+
+										<td
+											th:if="${#strings.toString(order.orderStatus) == 'PENDDING'}"
+											style="text-align: center;"><span
+											class="badge badge-warning">PENDDING</span></td>
+										<td
+											th:if="${#strings.toString(order.orderStatus) == 'IN_PROGRESS'}"
+											style="text-align: center;"><span
+											class="badge badge-primary">IN PROGRESS</span></td>
+										<td
+											th:if="${#strings.toString(order.orderStatus) == 'SHIPPING'}"
+											style="text-align: center;"><span
+											class="badge badge-primary"> <i
+												class="fas fa-shipping-fast"></i> SHIPPING
+										</span></td>
+										<td
+											th:if="${#strings.toString(order.orderStatus) == 'COMPLETE'}"
+											style="text-align: center;"><span
+											class="badge badge-success">COMPLETE</span></td>
+										<td
+											th:if="${#strings.toString(order.orderStatus) == 'CANCELED'}"
+											style="text-align: center;"><span
+											class="badge badge-danger">CANCELED</span></td>
+
 
 										<td class="project-actions text-right"><a
 											class="btn btn-primary btn-sm"
-											href="/admin/order/view-account/${order.id}"> <i
-												class="fas fa-folder"> </i> View
-										</a> <a th:if="${account.status == true}"
-											th:href="@{'/admin/order/toggle-status/' + ${order.id}}"
-											class="btn btn-success btn-sm"><i class="fas fa-eye"></i>
-												Ẩn </a> <a th:if="${account.status != true}"
-											th:href="@{'/admin/account/toggle-status/' + ${order.id}}"
-											class="btn btn-danger btn-sm"><i class="far fa-eye-slash"></i>
-												Hiện </a></td>
+											th:href="@{'/admin/order/view-detail/' + ${order.id}}"> <i
+												class="fas fa-folder"></i> <span>Chi tiết</span>
+										</a> <a
+											th:if="${#strings.toString(order.orderStatus) == 'PENDDING'}"
+											class="btn btn-primary btn-sm"
+											th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=in-progress'">
+												<i class="fas fa-folder"></i> <span>Xử lí</span>
+										</a> <a
+											th:if="${#strings.toString(order.orderStatus) == 'IN_PROGRESS'}"
+											class="btn btn-primary btn-sm"
+											th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=shipping'">
+												<i class="fas fa-folder"></i> <span>Giao hàng</span>
+										</a> <a
+											th:if="${#strings.toString(order.orderStatus) == 'SHIPPING'}"
+											class="btn btn-primary btn-sm"
+											th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=complete'">
+												<i class="fas fa-folder"></i> <span>Hoàn thành đơn</span>
+										</a> <a
+											th:if="${#strings.toString(order.orderStatus) != 'COMPLETE' && #strings.toString(order.orderStatus) != 'CANCELED'}"
+											class="btn btn-danger btn-sm"
+											th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=cancel'">
+												<i class="fas fa-times-circle"></i> <span>Hủy đơn</span>
+										</a></td>
 									</tr>
 								</th:block>
 							</tbody>

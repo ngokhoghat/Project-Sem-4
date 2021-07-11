@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/admin-layout}">
+
+<head>
+<meta charset="utf-8">
+<title>Chi tiết đơn hàng</title>
+
+<style type="text/css">
+.product-image {
+	height: 100px;
+	padding: 10px;
+	width: fit-content;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-origin: content-box;
+}
+
+.lds-dual-ring {
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+}
+
+.app-tr {
+	background-color: unset !important;
+	height: 100px;
+	position: relative;
+}
+
+.app-loading {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+}
+
+.lds-dual-ring:after {
+	content: " ";
+	display: block;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border-radius: 50%;
+	border: 6px solid #007bff;
+	border-color: #007bff transparent #007bff transparent;
+	animation: lds-dual-ring 1.2s linear infinite;
+}
+
+.card-tools {
+	display: flex;
+}
+
+.card-tools div {
+	display: flex;
+	margin-left: 50px;
+	align-items: center;
+}
+
+.card-tools div .badge {
+	line-height: 1.1;
+	margin-left: 10px;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="main-content">
+		<div class="content-wrapper">
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h2>Chi tiết đơn hàng</h2>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Order detail</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</section>
+			<form th:action="@{/admin/order/add-order}" th:object="${order}"
+				method="post">
+				<section class="content">
+					<div class="container-fluid">
+						<div class="card card-default">
+							<div class="card-header">
+								<div class="card-tools">
+									<div
+										th:if="${#strings.toString(order.paymentStatus) == 'PAID'}">
+										<span>Trạng thái thanh toán</span> <span
+											class="badge badge-success">PAID</span>
+									</div>
+									<div
+										th:if="${#strings.toString(order.paymentStatus) == 'UN_PAID'}">
+										<span>Trạng thái thanh toán</span> <span
+											class="badge badge-warning">UN PAID</span>
+									</div>
+
+									<div
+										th:if="${#strings.toString(order.orderStatus) == 'PENDDING'}">
+										<span>Trạng thái đơn hàng</span> <span
+											class="badge badge-warning">PENDDING</span>
+									</div>
+
+									<div
+										th:if="${#strings.toString(order.orderStatus) == 'IN_PROGRESS'}">
+										<span>Trạng thái đơn hàng</span> <span
+											class="badge badge-primary">IN PROGRESS</span>
+									</div>
+
+									<div
+										th:if="${#strings.toString(order.orderStatus) == 'SHIPPING'}">
+										<span>Trạng thái đơn hàng</span> <i
+											class="fas fa-shipping-fast"></i> <span
+											class="badge badge-primary">SHIPPING</span>
+									</div>
+
+									<div
+										th:if="${#strings.toString(order.orderStatus) == 'COMPLETE'}">
+										<span>Trạng thái đơn hàng</span> <span
+											class="badge badge-success">COMPLETE</span>
+									</div>
+
+									<div
+										th:if="${#strings.toString(order.orderStatus) == 'CANCELED'}">
+										<span>Trạng thái đơn hàng</span> <span
+											class="badge badge-danger">CANCELED</span>
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<table class="table table-striped projects">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Tên sản phẩm</th>
+											<th style="text-align: center;">Hình ảnh</th>
+											<th>Số lượng</th>
+											<th>Giá</th>
+											<th>Danh mục</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="orderDetail : ${order.orderDetails}">
+											<td><p th:text="${orderDetail.id}"></p></td>
+											<td><p th:text="${orderDetail.product.displayName}"></p></td>
+
+											<td th:if="${#lists.size(orderDetail.product.images) > 0}"
+												class="product-image"
+												th:style="'background-image: url(' + ${orderDetail.product.images[0].linkImage} + ');'"></td>
+											<td
+												th:unless="${#lists.size(orderDetail.product.images) > 0}"
+												class="product-image"></td>
+
+											<td><p th:text="${orderDetail.quantity}"></p></td>
+											<td><p
+													th:text="${#numbers.formatDecimal(orderDetail.product.price, 0, 'COMMA', 0, 'COMMA')} + ' ' + ${orderDetail.product.currency}"></p></td>
+											<td><p
+													th:text="${orderDetail.product.category.displayName}"></p></td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="row mt-5">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Phương thức thanh toán</label> <input
+												class="form-control" name="email" placeholder="Nhập email"
+												th:value="${order.payment.paymentType}" readonly="readonly"
+												disabled="disabled">
+										</div>
+										<div class="form-group">
+											<label>Ghi chú</label>
+											<textarea class="form-control" rows="3" name="note" id="note"
+												placeholder="Tạo ghi chú" disabled="disabled">[[${order.note}]]</textarea>
+										</div>
+
+									</div>
+									<div class="col-md-6 p-4">
+										<div class="table-responsive">
+											<table class="table">
+												<tr>
+													<th style="width: 50%; border-top: none;">Subtotal:</th>
+													<td style="border-top: none;" id="subPrice">0 VND</td>
+												</tr>
+												<tr>
+													<th>Tax (9.3%)</th>
+													<td>0 VND</td>
+												</tr>
+												<tr>
+													<th>Shipping:</th>
+													<td>0 VND</td>
+												</tr>
+												<tr>
+													<th>Total:</th>
+													<td
+														th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'COMMA')} + ' ' + ${order.currency}"></td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="card-tools"
+									style="text-align: right; justify-content: flex-end;">
+									<a
+										th:if="${#strings.toString(order.orderStatus) == 'PENDDING'}"
+										class="btn btn-primary btn-sm"
+										th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=in-progress'">
+										<i class="fas fa-folder"></i> <span>Xử lí</span>
+									</a><a
+										th:if="${#strings.toString(order.orderStatus) == 'IN_PROGRESS'}"
+										class="btn btn-primary btn-sm"
+										th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=shipping'">
+										<i class="fas fa-folder"></i> <span>Giao hàng</span>
+									</a> <a
+										th:if="${#strings.toString(order.orderStatus) == 'SHIPPING'}"
+										class="btn btn-primary btn-sm"
+										th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=complete'">
+										<i class="fas fa-folder"></i> <span>Hoàn thành đơn</span>
+									</a> <a
+										th:if="${#strings.toString(order.orderStatus) != 'COMPLETE' && #strings.toString(order.orderStatus) != 'CANCELED'}"
+										class="btn btn-danger btn-sm"
+										th:href="@{'/admin/order/change-status?id=' + ${order.id}} + '&action=cancel'">
+										<i class="fas fa-times-circle"></i> <span>Hủy đơn</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</form>
+		</div>
+	</div>
+
+	<script layout:fragment="script">
+		
+	</script>
+</body>
+</html>

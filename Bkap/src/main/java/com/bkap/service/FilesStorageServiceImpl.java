@@ -59,6 +59,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 		FileSystemUtils.deleteRecursively(root.toFile());
 	}
 
+	public void deleteImageById(String imageName) throws IOException {
+		Path path = root.resolve(imageName);
+		FileSystemUtils.deleteRecursively(path);
+	}
+
 	@Override
 	public Stream<Path> loadAll() {
 		try {
@@ -67,4 +72,5 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 			throw new RuntimeException("Could not load the files!");
 		}
 	}
+
 }

@@ -7,6 +7,57 @@
 <head>
 <meta charset="utf-8">
 <title>Tạo đơn hàng</title>
+
+<style type="text/css">
+.product-image {
+	height: 100px;
+	padding: 10px;
+	width: fit-content;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-origin: content-box;
+}
+
+.lds-dual-ring {
+	display: inline-block;
+	width: 80px;
+	height: 80px;
+}
+
+.app-tr {
+	background-color: unset !important;
+	height: 100px;
+	position: relative; 
+}
+
+.app-loading {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+}
+
+.lds-dual-ring:after {
+	content: " ";
+	display: block;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border-radius: 50%;
+	border: 6px solid #007bff;
+	border-color: #007bff transparent #007bff transparent;
+	animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring { 
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="main-content">
@@ -58,9 +109,10 @@
 											<th></th>
 										</tr>
 									</thead>
+
 									<tbody id="productContainer">
-										<tr>
-											<td>Tìm kiếm sản phẩm ngay.</td>
+										<tr style="position: relative; height: 100px;" class="app-tr">
+											<td class="app-loading">Tìm kiếm sản phẩm ngay.</td>
 										</tr>
 									</tbody>
 								</table>
@@ -80,8 +132,8 @@
 										</tr>
 									</thead>
 									<tbody id="cardContainer">
-										<tr id="cardContainerText">
-											<td>Chưa có sản phẩm.</td>
+										<tr id="cardContainerText" class="app-tr">
+											<td class="app-loading">Chưa có sản phẩm.</td>
 										</tr>
 									</tbody>
 								</table>
@@ -89,11 +141,15 @@
 								<div class="row mt-5">
 									<div class="col-md-6">
 										<div class="form-group">
+											
 											<label>Phương thức thanh toán</label> <select
-												class="form-control select2" name="currency">
-												<option value="VNĐ">Chuyển khoản</option>
-												<option value="$">Thanh toán tiền mặt</option>
+												class="form-control select2" name="currency" id="paymentMethod">
+												<th:block th:each="payment : ${listPayment}">
+													<option th:value="${payment.id}"
+														th:text="${payment.paymentType}"></option>
+												</th:block>
 											</select>
+											
 										</div>
 										<div class="form-group">
 											<label>Ghi chú</label>
@@ -107,7 +163,7 @@
 											<table class="table">
 												<tr>
 													<th style="width: 50%; border-top: none;">Subtotal:</th>
-													<td style="border-top: none;">0 VND</td>
+													<td style="border-top: none;" id="subPrice">0 VND</td>
 												</tr>
 												<tr>
 													<th>Tax (9.3%)</th>
@@ -129,8 +185,8 @@
 							<div class="card-footer">
 								<div class="card-tools" style="text-align: right;">
 									<button type="button" class="btn btn-tool"></button>
-									<button type="button" class="btn btn-primary" id="addOrderBtn">Thêm
-										tài khoản</button>
+									<button type="button" class="btn btn-primary" id="addOrderBtn">Tạo
+										hóa đơn</button>
 								</div>
 							</div>
 						</div>
@@ -150,9 +206,12 @@
 			let totalPrice = 0;
 			
 			$("#cardContainer tr").each(function (){
-				totalPrice += $(this).data("price")
+				console.log($(this).data("price"))
+				console.log($(this).data("quantity"))
+				totalPrice += $(this).data("price") * $(this).data("quantity")
 			})
 			
+			$("#subPrice").text(new Intl.NumberFormat().format(totalPrice ) + " " + currency)
 			$("#totalPrice").text(new Intl.NumberFormat().format(totalPrice ) + " " + currency)
 		}
 		
@@ -168,27 +227,45 @@
 				const id = $(this).parents("tr").data("id");
 				const product = data.filter(item=> item.id == id)[0];
 				
+				const idExists = $(`#cardContainer tr[data-id=${id}]`).length > 0;
+				
 				const { images, currency, description, displayName, price, quantity, status, category } = product;
-				const newPrice = new Intl.NumberFormat().format(price)
+				const newPrice = new Intl.NumberFormat().format(price);
+				const newQuantity = 1;
 				
 				if($("#cardContainerText").length)	$("#cardContainer").empty();
 				
-				$("#cardContainer").append(`
-					<tr data-id="${id}" data-price="${price}">
-						<td><p>${id}</p></td>
-						<td><p>${displayName}</p></td>
-						<td><p>${images ? "" : ""}</p></td>
-						<td><p>${quantity}</p></td>
-						<td><p>${newPrice} ${currency}</p></td>
-						<td><p>${category.displayName}</p></td>
-						
-						<td class="project-actions text-right">
-						<button type="button" class="btn btn-danger btn-sm">
-							<i class="fas fa-minus-square"></i>
-							<span>Xóa</span>
-						</button>
-					</tr>
-				`)
+				if(!idExists) {					
+					$("#cardContainer").append(`
+						<tr data-id="${id}" data-price="${price}" data-quantity="1">
+							<td><p>${id}</p></td>
+							<td><p>${displayName}</p></td>
+							<td class="product-image" style="background-image: url(${images.length ? images[0].linkImage: ""})"></td>
+							<td><p>${newQuantity}</p></td>
+							<td><p>${newPrice} ${currency}</p></td>
+							<td><p>${category.displayName}</p></td>
+							
+							<td class="project-actions text-right">
+							<button type="button" class="btn btn-danger btn-sm">
+								<i class="fas fa-minus-square"></i>
+								<span>Xóa</span>
+							</button>
+						</tr>
+					`)
+				} else {
+					const productElm = $($(`#productContainer tr[data-id=${id}] td`).children("p").get(2))
+					const productStr = productElm.text();
+					const product = parseInt(productStr);
+
+					const productQuantityElm = $($(`#cardContainer tr[data-id=${id}] td`).children("p").get(2))
+					const productQuantityStr = productQuantityElm.text();
+					const productQuantity = parseInt(productQuantityStr);
+					
+					if(productQuantity >= product) return alert("Vượt quá số lượng cho phép.");
+					
+					productQuantityElm.text(productQuantity + 1); 
+					productQuantityElm.parents("tr").data("quantity", productQuantity + 1);
+				}
 				
 				handleRemoveProduct();
 				calcPrice(currency);
@@ -207,7 +284,7 @@
 				<tr data-id="${id}">
 					<td><p>${id}</p></td>
 					<td><p>${displayName}</p></td>
-					<td><p>${images ? "" : ""}</p></td>
+					<td class="product-image" style="background-image: url(${images.length ? images[0].linkImage: ""})"></td>
 					<td><p>${quantity}</p></td>
 					<td><p>${newPrice} ${currency}</p></td>
 					<td><p>${category.displayName}</p></td>
@@ -233,9 +310,28 @@
 			  });
 			};
 
+		const getLoading = () => {
+			const productContainer = $("#productContainer");
+			productContainer.empty();
+			
+			if(!$("#productContainer .spinner-border").length){
+				productContainer.append(`
+					<tr class="app-tr">
+						<td class="app-loading">
+							<div class="lds-dual-ring"></div>
+						</td>
+					</tr>
+				`);
+			}
+			
+		}
+			
 		fromEvent(input, "input")
 		  .pipe(
-		    map((event) => event.target.value),
+		    map((event) => {
+		    	getLoading();
+		    	return event.target.value
+		    }),
 		    debounceTime(500),
 		    switchMap((val) => {
 		    	return from(getProduct(val)).pipe(
@@ -246,7 +342,43 @@
 		  .subscribe();
 		
 		$("#addOrderBtn").click(function (){
+			const products = [];
+			const paymentMethod = $("#paymentMethod").val();
+			const note = $("#note").val();
+			let totalPrice = 0;
 			
+			$("#cardContainer tr").each(function (){
+				products.push({
+					id: $(this).data("id"),
+					quantity: $(this).data("quantity") 
+				})
+				
+				totalPrice += $(this).data("price") * $(this).data("quantity")
+			})
+			
+			const body = {
+				products,
+				paymentMethod,
+				note,
+				totalPrice
+			}
+			
+			$.ajax({
+				url: "/api/order/create-order",
+				type: "POST",
+				data: JSON.stringify(body),
+				contentType: "application/json",
+				success: () => {
+					/* $("#note").val();
+					$("#paymentMethod").val();
+					$("#cardContainer").empty();
+					$("#subPrice").text("0 VNĐ");
+					$("#totalPrice").text("0 VNĐ"); */
+					
+					toastr.success('Thêm thành công.')
+				},
+				error: () => toastr.error('Thêm thất bại, đã có lỗi xảy ra.')
+			})
 		})
 	})
 	</script>
